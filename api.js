@@ -1,4 +1,4 @@
-const API_BASE_URL = "http://127.0.0.1:8000";  // Mudando para o endereço local
+const API_BASE_URL = "https://recyctech-back.onrender.com";
 
 export async function enviarImagemAPI(arquivo) {
     const formData = new FormData();
@@ -16,7 +16,7 @@ export async function enviarImagemAPI(arquivo) {
 
         const data = await response.json();
 
-        // Verifique se "data.objetos" existe e é um array
+
         if (!data.objetos || !Array.isArray(data.objetos)) {
             throw new Error("Resposta da API não contém um array de objetos");
         }
@@ -32,19 +32,21 @@ export async function enviarImagemAPI(arquivo) {
 
 export async function enviarFeedbackAPI(categoria, feedbackSelecionado) {
     const formData = new FormData();
-    formData.append("categoria", categoria);  // Envia a categoria
-    formData.append("feedback", feedbackSelecionado);  // Envia o feedback
+    formData.append("categoria", categoria); 
+    formData.append("feedback", feedbackSelecionado); 
 
     const response = await fetch(`${API_BASE_URL}/feedback`, {
         method: "POST",
         body: formData
     });
-
+    
     if (!response.ok) {
         const errorData = await response.json();
         console.error("Erro ao enviar feedback: ", errorData);
         throw new Error("Erro ao enviar feedback");
+    }else{
+        console.log("Feedback enviado: ", feedbackSelecionado);
     }
-
+    
     return await response.json();
 }

@@ -96,7 +96,7 @@ function limparImagem() {
     feedbackRadios.forEach(r => {
         r.checked = false;
         r.disabled = false;
-        r.parentElement.classList.remove("checked"); // remove visual
+        r.parentElement.classList.remove("checked");
     });
 
     categoriaCorreta.value = "";
@@ -193,17 +193,15 @@ btnRemover.addEventListener("click", () => {
 function mostrarResultado(data) {
     console.log("Dados recebidos da API:", data);
 
-    // Verifique se "data.objetos" é um array e se não está vazio
     if (!Array.isArray(data.objetos) || data.objetos.length === 0) {
         status.textContent = "Nenhum objeto detectado.";
-        resultadoDiv.style.display = "none";  // Esconde a seção de resultado
+        resultadoDiv.style.display = "none"; 
         return;
     }
 
-    // Limita o número de objetos para 5 (caso haja mais de 5)
+
     const objetosLimitados = data.objetos.slice(0, 5);
 
-    // Atualiza a lista de objetos na interface
     objetosList.innerHTML = "";
     objetosLimitados.forEach((obj, index) => {
         const listItem = document.createElement("div");
@@ -214,21 +212,20 @@ function mostrarResultado(data) {
         `;
         objetosList.appendChild(listItem);
 
-        // Atualiza a barra de confiança para cada objeto
+
         const barraConfianca = document.getElementById(`barra-confianca-${index}`);
         barraConfianca.style.width = obj.confianca + "%";
         barraConfianca.textContent = Math.round(obj.confianca) + "%";
         barraConfianca.style.background = obj.confianca >= 85 ? "#4caf50" : "#ff9800";
     });
 
-    // Configura o canvas com a imagem e os objetos
+
     const ctx = canvas.getContext("2d");
-    canvas.width = preview.clientWidth; // Ajuste canvas para o tamanho da imagem
+    canvas.width = preview.clientWidth;
     canvas.height = preview.clientHeight;
 
-    ctx.clearRect(0, 0, canvas.width, canvas.height); // Limpar canvas antes de desenhar
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    // Desenha a imagem de fundo no canvas (para garantir que esteja visível)
     const img = new Image();
     img.src = preview.src;
 
@@ -248,7 +245,7 @@ function mostrarResultado(data) {
         objetosLimitados.forEach(obj => {
             let [x1, y1, x2, y2] = obj.caixa || [0,0,0,0];
 
-            // Escala as coordenadas absolutas para o tamanho exibido
+   
             x1 *= scaleX;
             y1 *= scaleY;
             x2 *= scaleX;
@@ -275,8 +272,8 @@ function mostrarResultado(data) {
         });
     };
 
-    resultadoDiv.style.display = "block";  // Torna visível a seção de resultado
-    feedbackSection.style.display = "block";  // Torna visível a seção de feedback
+    resultadoDiv.style.display = "block";  
+    feedbackSection.style.display = "block";
     canvas.style.display = "block";
 }
 
@@ -307,7 +304,6 @@ btnEnviar.addEventListener("click", async () => {
 });
 
 /* ================= FEEDBACK ================= */
-// Marca visual da opção selecionada
 feedbackRadios.forEach(radio => {
     radio.addEventListener("change", () => {
         feedbackRadios.forEach(r => r.parentElement.classList.remove("checked"));
@@ -343,6 +339,7 @@ btnEnviarFeedback.addEventListener("click", async () => {
 
     try {
         status.innerHTML = `Resposta enviada: ${feedbackSelecionado}<br>Obrigado pelo feedback!`;
+        console.log("Feedback enviado: ", feedbackSelecionado);
     } catch (err) {
         status.textContent = "Erro ao enviar feedback.";
         console.error(err);
